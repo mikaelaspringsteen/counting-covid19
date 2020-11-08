@@ -17,11 +17,12 @@ total <- as.data.frame(data.table::fread("https://raw.githubusercontent.com/CSSE
 recovered <- as.data.frame(data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"))
 deaths <- as.data.frame(data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"))
 testing <- as.data.frame(data.table::fread("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv"))
-coronanet <- as.data.frame(data.table::fread("https://raw.githubusercontent.com/saudiwin/corona_tscs/master/data/CoronaNet/coronanet_release.csv"))
+#coronanet <- as.data.frame(data.table::fread("https://raw.githubusercontent.com/saudiwin/corona_tscs/master/data/CoronaNet/coronanet_release.csv"))
+coronanet <- read_csv("data/coronanet_release.csv")
 worldstats <- read.csv("data/worldstats.csv")
 
 # select, rename coronanet variables
-coronanet <- select(coronanet, -date_announced, -date_end, -type_text, -source_file_Type, -target_direction, -travel_mechanism, -compliance, -enforcer, -ISO_A3, -ISO_A2, -link_type, -target_country, -target_geog_level, -target_region, -target_province, -target_city, -target_other, -target_who_what, -index_high_est, -index_med_est, -index_low_est, -index_country_rank, -domestic_policy, -type_num_vaccines)
+coronanet <- select(coronanet, -date_announced, -date_end, -type_text, -target_direction, -travel_mechanism, -compliance, -enforcer, -ISO_A3, -ISO_A2, -target_country, -target_geog_level, -target_region, -target_province, -target_city, -target_other, -target_who_what, -index_high_est, -index_med_est, -index_low_est, -index_country_rank, -domestic_policy)
 coronanet$type[coronanet$type == "Restriction of Non-Essential Businesses"] <- "Restrict businesses"
 coronanet$type[coronanet$type == "Restriction of Non-Essential Government Services"] <- "Restrict gov. services"
 coronanet$type[coronanet$type == "Closure of Schools"] <- "School closure"
@@ -141,15 +142,42 @@ coronanet$type_sub_cat[coronanet$type_sub_cat == "Unspecified outdoor spaces"] <
 coronanet$type_sub_cat[coronanet$type_sub_cat == "Unspecified public facilities"] <- " (unspecified public facilities)"
 coronanet$type_sub_cat[coronanet$type_sub_cat == "Visa extensions (e.g. visa validity extended)"] <- " (visa extensions)"
 coronanet$type_sub_cat[coronanet$type_sub_cat == "Warehousing and support activities for transportation"] <- " (warehouse/support for transport)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Lockdown only applies to people of certain ages (Please note the age restriction in the text box)"] <- " (lockdown for certain ages)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Lockdown only applies to people with a condition not specified above (Please note the 'other' condition in the text entry)"] <- " (lockdown for people with another condition)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Lockdown only applies to people with certain health conditions (Please note the health conditions in the text box)"] <- " (lockdown for those with certain health conditions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Agriculture; forestry and fishing"] <- " (agriculture, forestry, fishing)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Annually recurring event allowed to occur with certain conditions"] <- " (annual events conditionally permitted)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Attendance at religious services restricted (e.g. mosque/church closings)"] <- " (religious attendance restricted)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Bars"] <- " (bars)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Cooperation among different jurisdictional entities (e.g. treaties or agreements among countries or provinces)"] <- " (inter-jurisdictional cooperation)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Election procedures (e.g. mail-in voting)"] <- " (election procedures)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Events at private residencies restricted (e.g. parties held at home)"] <- " (events at private residencies restricted)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Financial service activities except insurance and pension funding"] <- " (financial services, except insurance/pensions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Higher education institutions (i.e. degree granting institutions)"] <- " (higher ed. institutions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Insurance; reinsurance; and pension funding except compulsory social security"] <- " (insurance, pensions—not social security)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Keeping a distance of at least 6 feet or 1.5 meters apart"] <- " (maintain 6ft/1.5m distance)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Private health offices"] <- " (private health offices)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Regulated hours government services available (e.g. government services office open for certain hours only)"] <- " (gov. services available at certain hours)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Regulations on publicly provided waste management services"] <- " (public waste management regulations)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Restaurants"] <- " (restaurants)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Restrictions on  private vehicles in public circulation"] <- " (private vehicle restrictions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Restrictions on ridership of buses"] <- " (bus restrictions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Restrictions on ridership of subways and trams"] <- " (subway/tram restrictions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Restrictions on ridership of trains"] <- " (train restrictions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Restrictions ridership of other forms of public transportation (please include details in the text entry)"] <- " (public transport restrictions)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Transportation (land; water and air)"] <- " (transportation)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Water supply; sewerage; waste management and remediation activities"] <- " (water supply, sewage, waste management)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Wearing Masks in all public spaces/everywhere"] <- " (wearing masks in public)"
+coronanet$type_sub_cat[coronanet$type_sub_cat == "Wearing Masks inside public or commercial building"] <- " (wearing masks in buildings)"
 coronanet$type_sub_cat[is.na(coronanet$type_sub_cat)] <- ""
 coronanet$Measure <- paste0(coronanet$type, coronanet$type_sub_cat)
-coronanet <- select(coronanet, date_start, country, init_country_level, link, Measure)
+
+coronanet <- select(coronanet, date_start, country, init_country_level, link, type, description, link, Measure)
 coronanet <- filter(coronanet, init_country_level == "National" | init_country_level == "No, it is at the national level")
-coronanet <- select(coronanet, -init_country_level)
-coronanet <- unique(coronanet[ , 1:4])
-names(coronanet) <- c("Date", "Country", "Link", "Measure")
-coronanet <- select(coronanet, -Link)
-coronanet <- unique(coronanet[ , 1:3])
+coronanet <- select(coronanet, -init_country_level, -link, -type, -description)
+coronanet <- unique(coronanet[ , c(1:3)])
+names(coronanet) <- c("Date", "Country", "Measure")
+coronanet$Measure <- gsub("\n", "", coronanet$Measure, fixed = TRUE)
 coronanet <- coronanet %>%
   group_by(Country, Date) %>%
   mutate(Measure = paste0(Measure, collapse = " <br> "))
@@ -158,24 +186,26 @@ coronanet <- unique(coronanet[ , 1:3])
 # select, rename testing variables
 testing <- select(testing, Entity, Date, "Cumulative total")
 names(testing) <- c("Description", "Date", "Tests")
-#levels(as.factor(testing$Description))
-#View(filter(testing, Description == "India - people tested"))
-testing <- filter(testing, Description != "United States - inconsistent units (COVID Tracking Project)")
-testing <- filter(testing, Description != "Japan - people tested")
-testing <- filter(testing, Description != "Italy - people tested")
-testing <- filter(testing, Description != "United Kingdom - tests performed")
+levels(as.factor(testing$Description))
+#View(filter(testing, Description == "Argentina - tests performed"))
+# remove these entries:
+testing <- filter(testing, Description != "Argentina - tests performed")
+testing <- filter(testing, Description != "France - people tested")
 testing <- filter(testing, Description != "India - people tested")
+testing <- filter(testing, Description != "Italy - people tested")
+testing <- filter(testing, Description != "Japan - tests performed")
+testing <- filter(testing, Description != "Poland - people tested")
+testing <- filter(testing, Description != "Singapore - samples tested")
+testing <- filter(testing, Description != "Sweden - samples tested")
+testing <- filter(testing, Description != "Thailand - tests performed")
+testing <- filter(testing, Description != "United States - units unclear (incl. non-PCR)")
 
 # split testing$Entity into Country and Units
 newtesting <- colsplit(testing$Description, " - ", names = c("Country", "Units"))
 testing <- cbind(testing, newtesting)
 
-# 0 observations to NA
+# merge
 covid_cases <- list(total, recovered, deaths)
-covid_cases <- lapply(covid_cases, function(df) {
-  df[ , c(5:ncol(df))][df[ , c(5:ncol(df))] == 0] <- NA
-  df
-})
 
 # reshape
 covid_cases[[1]] <- gather(covid_cases[[1]], Date, Total, -c(1:4))
@@ -190,6 +220,9 @@ covid_cases <- lapply(covid_cases, function(df) {
 })
 
 # format variables
+#setdiff(levels(as.factor(covid_cases[[1]]$Country)), levels(as.factor(worldstats$Country)))
+#setdiff(levels(as.factor(testing$Country)), levels(as.factor(covid_cases[[1]]$Country)))
+#setdiff(levels(as.factor(coronanet$Country)), levels(as.factor(covid_cases[[1]]$Country)))
 covid_cases <- lapply(covid_cases, function(df) {
   df$Country[df$Country == "Bahamas, The"] <- "The Bahamas"
   df$Country[df$Country == "Bahamas"] <- "The Bahamas"
@@ -201,6 +234,7 @@ covid_cases <- lapply(covid_cases, function(df) {
   df$Country[df$Country == "East Timor"] <- "Timor-Leste"
   df$Country[df$Country == "Gambia, The"] <- "The Gambia"
   df$Country[df$Country == "Gambia"] <- "The Gambia"
+  df$Country[df$Country == "Holy See"] <- "Vatican"
   df$Country[df$Country == "Korea, South"] <- "South Korea"
   df$Country[df$Country == "Taiwan*"] <- "Taiwan"
   df$Country[df$Country == "Saint Lucia"] <- "St. Lucia"
@@ -218,7 +252,6 @@ covid_cases <- lapply(covid_cases, function(df) {
 })
 testing$Date <- as.Date(testing$Date, "%Y-%m-%d")
 testing$Country[testing$Country == "Czech Republic"] <- "Czechia"
-# setdiff(levels(as.factor(covid_cases[[1]]$Country)), levels(as.factor(coronanet$Country)))
 coronanet$Country[coronanet$Country == "Ivory Coast"] <- "Cote d'Ivoire"
 coronanet$Country[coronanet$Country == "Czech Republic"] <- "Czechia"
 coronanet$Country[coronanet$Country == "Swaziland"] <- "Eswatini"
@@ -231,17 +264,13 @@ coronanet$Country[coronanet$Country == "United Republic of Tanzania"] <- "Tanzan
 coronanet$Country[coronanet$Country == "Gambia"] <- "The Gambia"
 coronanet$Country[coronanet$Country == "East Timor"] <- "Timor-Leste"
 coronanet$Country[coronanet$Country == "United States of America"] <- "United States"
+coronanet$Country[coronanet$Country == "Guinea Bissau"] <- "Guinea-Bissau"
+coronanet$Country[coronanet$Country == "Republic of Serbia"] <- "Serbia"
 
 # summarize by country
 covid_cases[[1]] <- aggregate(data = covid_cases[[1]], Total ~ Country + Date, sum, drop = FALSE)
 covid_cases[[2]] <- aggregate(data = covid_cases[[2]], Recovered ~ Country + Date, sum, drop = FALSE)
 covid_cases[[3]] <- aggregate(data = covid_cases[[3]], Deaths ~ Country + Date, sum, drop = FALSE)
-
-# keep complete cases
-covid_cases <- lapply(covid_cases, function(df) {
-  df <- df[complete.cases(df), ]
-  df
-})
 
 # merge covid_cases
 covid_cases <- covid_cases %>% reduce(left_join, by = c("Country", "Date"))
@@ -261,6 +290,67 @@ covid_cases <- merge(covid_cases, Day_dat, all = TRUE)
 
 # add NewCases variable
 covid_cases <- covid_cases %>% group_by(Country) %>% mutate(NewCases = Total - lag(Total, default = first(Total)))
+
+# smooth over 7 days
+movingAverage <- function(x, n=1, centered=FALSE) {
+  
+  if (centered) {
+    before <- floor  ((n-1)/2)
+    after  <- ceiling((n-1)/2)
+  } else {
+    before <- n-1
+    after  <- 0
+  }
+  
+  # Track the sum and count of number of non-NA items
+  s     <- rep(0, length(x))
+  count <- rep(0, length(x))
+  
+  # Add the centered data 
+  new <- x
+  # Add to count list wherever there isn't a 
+  count <- count + !is.na(new)
+  # Now replace NA_s with 0_s and add to total
+  new[is.na(new)] <- 0
+  s <- s + new
+  
+  # Add the data from before
+  i <- 1
+  while (i <= before) {
+    # This is the vector with offset values to add
+    new   <- c(rep(NA, i), x[1:(length(x)-i)])
+    
+    count <- count + !is.na(new)
+    new[is.na(new)] <- 0
+    s <- s + new
+    
+    i <- i+1
+  }
+  
+  # Add the data from after
+  i <- 1
+  while (i <= after) {
+    # This is the vector with offset values to add
+    new   <- c(x[(i+1):length(x)], rep(NA, i))
+    
+    count <- count + !is.na(new)
+    new[is.na(new)] <- 0
+    s <- s + new
+    
+    i <- i+1
+  }
+  
+  # return sum divided by count
+  s/count
+}
+test <- covid_cases
+test <- group_split(test)
+test <- lapply(test, function(df) {
+  df$Smoothed <- movingAverage(df$NewCases, 7, TRUE)
+  df
+})
+test <- bind_rows(test)
+covid_cases <- test
 
 # add NewDeaths variable
 covid_cases <- covid_cases %>% group_by(Country) %>% mutate(NewDeaths = Deaths - lag(Deaths, default = first(Deaths)))
@@ -316,7 +406,7 @@ middlecountries[62:71,]
 countries[with(countries, order(Total)), ]
 
 # restructuring for app
-covid_cases <- select(covid_cases, Country, Day, Date, Testsper100_000, NewCases, Units, Measure, Totalper100_000, DeathRate, Population_mil, Over65_perc, Slums_perc, GDP_pcap_ppp, Salaried_perc, Poverty_perc, StatsCapacity, SciArticles, LifeExp, HospBed_per10thou, MD_per10thou, HygBasic_natperc, Population)
+covid_cases <- select(covid_cases, Country, Day, Date, Testsper100_000, NewCases, Smoothed, Units, Measure, Totalper100_000, DeathRate, Population_mil, Over65_perc, Slums_perc, GDP_pcap_ppp, Salaried_perc, Poverty_perc, StatsCapacity, SciArticles, LifeExp, HospBed_per10thou, MD_per10thou, HygBasic_natperc, Population)
 
 # write csv
 write.csv(covid_cases, "covid_cases.csv", row.names = FALSE)
